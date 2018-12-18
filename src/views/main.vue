@@ -22,11 +22,23 @@
       :visible.sync="edit"
       width="30%"
       :before-close="editClose">
-      <span>{{user.name}}</span>
-      <el-form></el-form>
+      <el-form :model='user'>
+        <el-form-item label='姓名'>
+          <el-input type='name' v-model='user.name'></el-input>
+        </el-form-item>
+        <el-form-item label='学号'>
+          <el-input type='number' v-model='user.number'></el-input>
+        </el-form-item>
+        <el-form-item label='年龄'>
+          <el-input type='age' v-model='user.age'></el-input>
+        </el-form-item>
+        <el-form-item label='班级'>
+          <el-input type='class' v-model='user.class'></el-input>
+        </el-form-item>
+      </el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="edit = false">取 消</el-button>
-        <el-button type="primary" @click="edit = false">确 定</el-button>
+        <el-button type="primary" @click="editCommit">确 定</el-button>
       </span>
     </el-dialog>
   </div>
@@ -72,14 +84,19 @@ export default {
       this.user = row
     },
     editClose () {
-      this.$confirm('确认关闭？')
+      this.$confirm('确认取消编辑？')
           .then(_ => {
+            this.edit = false
+            this.$message('已取消 ～');
 
-            this.$message('修改成功 ～');
           })
           .catch(_ => {
-            this.$message.error('啊哦，发生了错误 ～');
+
           });
+    },
+    editCommit () {
+      this.edit = false
+      console.log(this.user);
     }
   }
 }
