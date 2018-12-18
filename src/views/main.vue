@@ -11,8 +11,8 @@
         <el-table-column prop='class' label='班级' width='150'></el-table-column>
         <el-table-column label='操作' width='150'>
           <template slot-scope='scope'>
-            <el-button type='text' size='small' @click='edit=true'>编辑</el-button>
-            <el-button type='text' size='small'>删除</el-button>
+            <el-button type='text' size='small' @click='editStu(scope.row)'>编辑</el-button>
+            <el-button type='text' size='small' @click='deleteStu(scope.row)'>删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -22,7 +22,8 @@
       :visible.sync="edit"
       width="30%"
       :before-close="editClose">
-      <span></span>
+      <span>{{user.name}}</span>
+      <el-form></el-form>
       <span slot="footer" class="dialog-footer">
         <el-button @click="edit = false">取 消</el-button>
         <el-button type="primary" @click="edit = false">确 定</el-button>
@@ -38,7 +39,13 @@ export default {
     return {
       student:[],
       edit: false,
-      delete: false
+      delete: false,
+      user: {
+        number: '',
+        name: '',
+        age: '',
+        class: ''
+      }
     }
   },
   created () {
@@ -50,6 +57,19 @@ export default {
       .then(data => {
         this.student = data
       })
+    },
+    deleteStu (row) {
+      this.$confirm('此操作将永久删除该人员，是否继续？', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(() => {
+        console.log(row);
+      })
+    },
+    editStu (row) {
+      this.edit = true
+      this.user = row
     },
     editClose () {
       this.$confirm('确认关闭？')
