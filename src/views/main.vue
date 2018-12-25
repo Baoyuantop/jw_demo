@@ -17,6 +17,31 @@
         </el-table-column>
       </el-table>
     </div>
+    <div class="add">
+      <el-tooltip class="item" effect="dark" content="点击增加学生" placement="top-center">
+        <el-button type="danger" icon="el-icon-edit" circle @click='addStu'></el-button>
+      </el-tooltip>
+    </div>
+    <div class="addStu" v-if='add'>
+      <el-form :model='newStu' class='form'>
+        <el-form-item label='姓名'>
+          <el-input type='username' v-model='newStu.username'></el-input>
+        </el-form-item>
+        <el-form-item label='学号'>
+          <el-input type='number' v-model='newStu.number'></el-input>
+        </el-form-item>
+        <el-form-item label='年龄'>
+          <el-input type='password' v-model='newStu.age'></el-input>
+        </el-form-item>
+        <el-form-item label='班级'>
+          <el-input type='password' v-model='newStu.class'></el-input>
+        </el-form-item>
+        <el-form-item>
+          <el-button type='primary' @click="">提交</el-button>
+          <el-button class="clear" @click="cancel">取消</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <el-dialog
       title="编辑用户"
       :visible.sync="edit"
@@ -57,7 +82,14 @@ export default {
         name: '',
         age: '',
         class: ''
-      }
+      },
+      newStu: {
+        name: '',
+        number: '',
+        age: '',
+        class: ''
+      },
+      add: false
     }
   },
   created () {
@@ -97,6 +129,12 @@ export default {
     editCommit () {
       this.edit = false
       console.log(this.user);
+    },
+    addStu () {
+      this.add = true
+    },
+    cancel () {
+      this.add = false
     }
   }
 }
@@ -114,6 +152,34 @@ export default {
   .table{
     width: 50%;
     margin: 10vh auto;
+  }
+  .add{
+    position: fixed;
+    right: 10%;
+    bottom: 10%;
+    button{
+      width: 4vw;
+      height: 4vw;
+    }
+  }
+  .addStu{
+    z-index: 1;
+    position: fixed;
+    width: 30vw;
+    height: 60vh;
+    top: 20vh;
+    left: 35vw;
+    background-color: white;
+    box-shadow: 0px 0px 15px #888888;
+    .el-form-item{
+      width: 15vw;
+      height: 7vh;
+      margin-left: 7.5vw;
+      margin-top: 5vh;
+    }
+    .clear{
+      margin-left: 5vw;
+    }
   }
 }
 </style>

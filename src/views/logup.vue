@@ -5,7 +5,7 @@
         <el-form-item label='用户名' prop='username'>
           <el-input type='username' v-model='user.username'></el-input>
         </el-form-item>
-        <el-form-item label='学号' prop='usernumber'>
+        <el-form-item label='学号' prop='number'>
           <el-input type='number' v-model='user.number'></el-input>
         </el-form-item>
         <el-form-item label='密码' prop='password'>
@@ -26,18 +26,6 @@
 <script>
 export default {
   data () {
-    var checkname = (rule, value, callback) => {
-      if (!value) {
-        return callback(new Error('姓名不能为空'))
-      }
-      callback();
-    }
-    var checknumber = (rule, value, callback) => {
-      if (value === ' ') {
-        callback(new Error('学号不能为空 ～'))
-      }
-      callback();
-    }
     var checkpass = (rule, value, callback) => {
       if (value === '') {
         return callback (new Error('请输入密码 ～'))
@@ -62,16 +50,17 @@ export default {
       },
       rule: {
         username: [
-          {validator: checkname, trigger: 'blur'}
+          { required: true, message: '请输入用户名', trigger: 'blur' },
         ],
-        usernumber: [
-          {validator: checknumber, trigger: 'blur'}
+        number: [
+          {required: true, message: '请输入学号～', trigger: 'blur'},
+          {min: 5, max: 10, message: '格式错误', trigger: 'blur'}
         ],
         password: [
-          {validator: checkpass, trigger: 'blur'}
+          {validator: checkpass, required: true, trigger: 'blur'}
         ],
         checkpass: [
-          {validator: checkpass2, trigger: 'blur'}
+          {validator: checkpass2, required: true, trigger: 'blur'}
         ]
       }
     }
@@ -81,8 +70,19 @@ export default {
       this.$refs[user].validate((valid) => {
           if (valid) {
             console.log(this.user);
+            this.$axios({
+              method: 'post',
+              url: '/users',
+              data: {
+                username: this.user.username,
+                number: this.user.number,
+                password: this.user.password
+              }
+            }).then(res =>{
+              console.log(res);
+            })
           } else {
-            console.log('error submit!!');
+            this.$message.error('信息还没填好 ^_^');
             return false;
           }
         })

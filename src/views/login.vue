@@ -5,10 +5,10 @@
   </div>
   <div class="form">
     <el-form :model='people' status-icon :rules='rule' ref='people'>
-      <el-form-item label='学号' prop='peoplenumber'>
+      <el-form-item label='学号' prop='number'>
         <el-input type='number' v-model='people.number'></el-input>
       </el-form-item>
-      <el-form-item label='密码' prop='peoplepassword'>
+      <el-form-item label='密码' prop='password'>
         <el-input type='password' v-model='people.password'></el-input>
       </el-form-item>
       <el-form-item>
@@ -24,29 +24,18 @@
 <script>
 export default {
   data () {
-    var checknumber = (rule, value, callback) => {
-      if (value === '') {
-        callback(new Error('学号不能为空 ～'))
-      }
-      callback();
-    };
-    var checkpass = (rule, value, callback) => {
-      if (value === '') {
-        callback (new Error('请输入密码 ～'))
-      }
-      callback();
-    };
     return {
       people: {
         number: '',
         password: ''
       },
       rule: {
-        peoplenumber: [
-          {validator: checknumber, trigger: 'blur'}
+        number: [
+          {required: true, message: '请输入学号～', trigger: 'blur'},
+          {min: 5, max: 10, message: '格式错误', trigger: 'blur'}
         ],
-        peoplepassword: [
-          {validator: checkpass, trigger: 'blur'}
+        password: [
+          {required: true, message: '请输入密码～', trigger: 'blur'}
         ]
       }
     }

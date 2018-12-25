@@ -11,7 +11,8 @@ Vue.config.productionTip = false
 
 Vue.use(ElementUI)
 Vue.prototype.$axios = axios;
-axios.defaults.baseURL = 'https://127.0.0.1:3000';
+axios.defaults.baseURL = 'http://127.0.0.1:5000';
+axios.withCredentials = true;
 /* eslint-disable no-new */
 new Vue({
   el: '#app',
