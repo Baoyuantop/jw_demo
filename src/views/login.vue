@@ -44,7 +44,34 @@ export default {
     submit (people) {
       this.$refs[people].validate((valid) => {
           if (valid) {
-            console.log(this.people);
+            const loading = this.$loading({
+              lock: true,
+              text: '玩命加载中',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0,0,0,0.7)'
+            });
+            this.$axios({
+              method: 'post',
+              url: '/login',
+              data:{
+                number: this.people.number,
+                password: this.people.password
+              }
+            }).then(res =>{
+              console.log(res);
+              if (res.data === true) {
+                loading.close();
+                sessionStorage.setItem('number',this.people.number);
+                this.$router.push('/main');
+              } else if (res.data === false) {
+                loading.close();
+                this.$message.error('用户信息错误');
+              }
+            }).catch(error =>{
+              loading.close();
+              this.$message.error('网络开小差了~');
+              console.log(error);
+            })
           } else {
             console.log('error submit!!');
             return false;

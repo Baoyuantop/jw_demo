@@ -69,7 +69,12 @@ export default {
     submit (user) {
       this.$refs[user].validate((valid) => {
           if (valid) {
-            console.log(this.user);
+            const loading = this.$loading({
+              lock: true,
+              text: '玩命加载中',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0,0,0,0.7)'
+            });
             this.$axios({
               method: 'post',
               url: '/users',
@@ -79,7 +84,18 @@ export default {
                 password: this.user.password
               }
             }).then(res =>{
-              console.log(res);
+              loading.close();
+              if (res.data === 'ok') {
+                loading.close();
+                this.$message({message: '注册成功，即将跳转',type: 'success'});
+                this.$router.push('/');
+              } else if (res.data === 'logged') {
+                loading.close();
+                this.$message({message: '这个号注册过了~',type: 'warning'});
+              }
+            }).catch(error =>{
+              loading.close();
+              this.$message.error('网络开小差了~');
             })
           } else {
             this.$message.error('信息还没填好 ^_^');

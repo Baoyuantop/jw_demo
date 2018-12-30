@@ -21,6 +21,9 @@ export default new Router({
     {
       path: '/main',
       name: 'Main',
+      meta: {
+        requireAuth: true
+      },
       component: Main
     }
   ]
